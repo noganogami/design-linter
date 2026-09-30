@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/DesignLinter/DesignLinter.fsproj" />
+    <Compile Include="Program.fs" />
+    <None Include="Fixtures/migration.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,3100 @@
+[
+  {
+    "name": "valid",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 0,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "baseline-diff",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "beforeDesign": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component |\n|---|---|\n| src/payment/service.ts | PaymentService |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Req Coverage | Key Dependencies (P0/P1) |\n|---|---|---|---|\n| PaymentService | Service | 1.1, 1.2 | Gateway (P0) |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record payments and execute retries |\n| Requirements | 1.1, 1.2 |\n\n**Dependencies**\n- External: Gateway — payment processing (P0)\n",
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [
+        {
+          "area": "Components",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "added",
+              "subject": "component:PaymentRetryWorker",
+              "before": [],
+              "after": [
+                "component:PaymentRetryWorker"
+              ]
+            }
+          ]
+        },
+        {
+          "area": "Dependencies",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "added",
+              "subject": "component:PaymentRetryWorker → component:PaymentService",
+              "before": [],
+              "after": [
+                "component:PaymentRetryWorker → component:PaymentService"
+              ]
+            }
+          ]
+        },
+        {
+          "area": "Requirements",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Requirement Mapping",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "changed",
+              "subject": "1.2",
+              "before": [
+                "component:PaymentService"
+              ],
+              "after": [
+                "component:PaymentRetryWorker"
+              ]
+            }
+          ]
+        },
+        {
+          "area": "Files",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "added",
+              "subject": "file:src/payment/retry.ts",
+              "before": [],
+              "after": [
+                "file:src/payment/retry.ts"
+              ]
+            }
+          ]
+        },
+        {
+          "area": "Component–File Mapping",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "changed",
+              "subject": "component:PaymentRetryWorker",
+              "before": [],
+              "after": [
+                "src/payment/retry.ts"
+              ]
+            }
+          ]
+        }
+      ],
+      "focusCount": 3,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "reverse-diff",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component |\n|---|---|\n| src/payment/service.ts | PaymentService |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Req Coverage | Key Dependencies (P0/P1) |\n|---|---|---|---|\n| PaymentService | Service | 1.1, 1.2 | Gateway (P0) |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record payments and execute retries |\n| Requirements | 1.1, 1.2 |\n\n**Dependencies**\n- External: Gateway — payment processing (P0)\n",
+    "beforeRequirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "beforeDesign": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 1,
+            "mapped": 1,
+            "files": 1
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 1,
+            "edges": 0,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentService|resolved"
+      ],
+      "diff": [
+        {
+          "area": "Components",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "removed",
+              "subject": "component:PaymentRetryWorker",
+              "before": [
+                "component:PaymentRetryWorker"
+              ],
+              "after": []
+            }
+          ]
+        },
+        {
+          "area": "Dependencies",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "removed",
+              "subject": "component:PaymentRetryWorker → component:PaymentService",
+              "before": [
+                "component:PaymentRetryWorker → component:PaymentService"
+              ],
+              "after": []
+            }
+          ]
+        },
+        {
+          "area": "Requirements",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Requirement Mapping",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "changed",
+              "subject": "1.2",
+              "before": [
+                "component:PaymentRetryWorker"
+              ],
+              "after": [
+                "component:PaymentService"
+              ]
+            }
+          ]
+        },
+        {
+          "area": "Files",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "removed",
+              "subject": "file:src/payment/retry.ts",
+              "before": [
+                "file:src/payment/retry.ts"
+              ],
+              "after": []
+            }
+          ]
+        },
+        {
+          "area": "Component–File Mapping",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "changed",
+              "subject": "component:PaymentRetryWorker",
+              "before": [
+                "src/payment/retry.ts"
+              ],
+              "after": []
+            }
+          ]
+        }
+      ],
+      "focusCount": 3,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "unknown-format",
+    "requirements": "# 要件\n内容",
+    "design": "# 設計\n内容",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 0,
+            "referenced": 0,
+            "mapped": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN",
+            "UNKNOWN",
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 0,
+            "mapped": 0,
+            "files": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN",
+            "UNKNOWN",
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2B",
+          "status": "UNKNOWN",
+          "metrics": {},
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M3",
+          "status": "UNKNOWN",
+          "metrics": {
+            "components": 0,
+            "edges": 0,
+            "cycles": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "partial",
+        "components": "partial",
+        "mappings": "complete",
+        "files": "partial",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "partial"
+      },
+      "diagnostics": [
+        "missing-boundary",
+        "missing-file-plan",
+        "no-components",
+        "no-requirements"
+      ],
+      "requirements": [],
+      "entities": [],
+      "files": [],
+      "relations": [],
+      "diff": [],
+      "focusCount": 3,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "missing-id",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 9.9 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 9.9 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "FAIL",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "FAIL",
+          "metrics": {
+            "total": 2,
+            "referenced": 1,
+            "mapped": 1
+          },
+          "findingStatuses": [
+            "FAIL",
+            "FAIL",
+            "FAIL"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|9.9|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "parent-id",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "referenced": 1,
+            "mapped": 1
+          },
+          "findingStatuses": [
+            "UNKNOWN",
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "partial",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "ambiguous-requirement-reference",
+        "ambiguous-requirement-reference"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "conflicting-coverage",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "partial",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "conflicting-coverage"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentRetryWorker|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "empty-criteria",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n\n### Requirement 2: Missing\n#### Acceptance Criteria\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "partial",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "empty-criteria"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "duplicate-requirements",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "partial",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "duplicate-requirement",
+        "duplicate-requirement",
+        "empty-criteria"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "dangling-target",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n\n## Requirements Traceability\n| Requirement | Components |\n|---|---|\n| 1.1 | Ghost |",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "FAIL",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "FAIL",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": [
+            "FAIL"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:Ghost|unresolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "missing-file-mapping",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "FAIL",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "FAIL",
+          "metrics": {
+            "total": 2,
+            "mapped": 1,
+            "files": 1
+          },
+          "findingStatuses": [
+            "FAIL"
+          ]
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "placeholder-file",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| TBD | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "FAIL",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "FAIL",
+          "metrics": {
+            "total": 2,
+            "mapped": 1,
+            "files": 1
+          },
+          "findingStatuses": [
+            "FAIL"
+          ]
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "placeholder-boundary",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\n- TODO\n- TBD\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "FAIL",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "FAIL",
+          "metrics": {},
+          "findingStatuses": [
+            "FAIL"
+          ]
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "optional-todo",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n\n## Open Questions\n- TODO: consider batching",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 0,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "undefined-dependency",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n\n- Outbound: MissingService — unknown (P1)",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "UNKNOWN",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "partial",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "unresolved-dependency"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:MissingService|unresolved",
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "cycle",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- Outbound: PaymentRetryWorker — reverse (P1)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "REVIEW_REQUIRED",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "REVIEW_REQUIRED",
+          "metrics": {
+            "components": 2,
+            "edges": 2,
+            "cycles": 1
+          },
+          "findingStatuses": [
+            "REVIEW_REQUIRED"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|component:PaymentRetryWorker|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "self-loop",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n\n- Outbound: PaymentRetryWorker — self (P1)",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "REVIEW_REQUIRED",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "REVIEW_REQUIRED",
+          "metrics": {
+            "components": 2,
+            "edges": 2,
+            "cycles": 1
+          },
+          "findingStatuses": [
+            "REVIEW_REQUIRED"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentRetryWorker|resolved",
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "conflicting-none",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | None | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "UNKNOWN",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "partial",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "conflicting-dependencies"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "sequence-is-not-dependency",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n\n## System Flows\n### PayFlow\n```mermaid\nsequenceDiagram\n A->>B: request\n B->>A: response\n```",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway",
+        "flow:PayFlow"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 0,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "summary-only",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | None | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | None | Batch |\n\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 0,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 0,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "file-tree",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n```text\nsrc/\n├── payment/\n│   ├── service.ts # PaymentService\n│   └── retry.ts # Component: PaymentRetryWorker\n```\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/",
+          "kind": "directory",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/",
+          "kind": "directory",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 0,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "directory-pattern",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n- src/payment/ — same module pattern\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "mapped": 0,
+            "files": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN",
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/",
+          "kind": "directory",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "compact-component",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design\n## Components and Interfaces\n- Component: Worker — Requirements: 1.1, 1.2\n## File Structure Plan\n### Modified Files\n- src/worker.ts — Component: Worker",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 1,
+            "mapped": 1,
+            "files": 1
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "UNKNOWN",
+          "metrics": {},
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M3",
+          "status": "UNKNOWN",
+          "metrics": {
+            "components": 1,
+            "edges": 0,
+            "cycles": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "partial",
+        "elements": "complete",
+        "boundary": "partial"
+      },
+      "diagnostics": [
+        "dependencies-undeclared",
+        "missing-boundary"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:Worker"
+      ],
+      "files": [
+        {
+          "path": "src/worker.ts",
+          "kind": "file",
+          "change": "modified"
+        }
+      ],
+      "relations": [
+        "implementedAt|component:Worker|src/worker.ts|resolved",
+        "realizedBy|1.1|component:Worker|resolved",
+        "realizedBy|1.2|component:Worker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 2,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "unsupported-list",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n- AnotherWorker handles background work.\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "UNKNOWN",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "partial",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "unsupported-component-list"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [],
+      "focusCount": 3,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "unnamed-flow",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n\n## System Flows\n```mermaid\nflowchart TD\nA-->B\n```\n## Requirements Traceability\n| Requirement | Flows |\n|---|---|\n| 1.2 | PayFlow |",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": [
+            "UNKNOWN",
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "partial",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "unnamed-design-elements"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved",
+        "realizedBy|1.2|flow:PayFlow|unresolved"
+      ],
+      "diff": [],
+      "focusCount": 1,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "added-requirement",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n\n3. The system shall notify the user.",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2, 1.3 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2, 1.3 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "beforeDesign": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 3,
+            "referenced": 3,
+            "mapped": 3
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2",
+        "1.3"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved",
+        "realizedBy|1.3|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [
+        {
+          "area": "Components",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Dependencies",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Requirements",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "added",
+              "subject": "1.3",
+              "before": [],
+              "after": [
+                "1.3"
+              ]
+            }
+          ]
+        },
+        {
+          "area": "Requirement Mapping",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Files",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Component–File Mapping",
+          "status": "COMPARED",
+          "changes": []
+        }
+      ],
+      "focusCount": 1,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "rename",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | RetryJob | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| RetryJob | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: RetryJob — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### RetryJob\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "beforeDesign": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentService",
+        "component:RetryJob",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "dependsOn|component:RetryJob|component:PaymentService|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "implementedAt|component:RetryJob|src/payment/retry.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:RetryJob|resolved"
+      ],
+      "diff": [
+        {
+          "area": "Components",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "added",
+              "subject": "component:RetryJob",
+              "before": [],
+              "after": [
+                "component:RetryJob"
+              ]
+            },
+            {
+              "kind": "removed",
+              "subject": "component:PaymentRetryWorker",
+              "before": [
+                "component:PaymentRetryWorker"
+              ],
+              "after": []
+            }
+          ]
+        },
+        {
+          "area": "Dependencies",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "added",
+              "subject": "component:RetryJob → component:PaymentService",
+              "before": [],
+              "after": [
+                "component:RetryJob → component:PaymentService"
+              ]
+            },
+            {
+              "kind": "removed",
+              "subject": "component:PaymentRetryWorker → component:PaymentService",
+              "before": [
+                "component:PaymentRetryWorker → component:PaymentService"
+              ],
+              "after": []
+            }
+          ]
+        },
+        {
+          "area": "Requirements",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Requirement Mapping",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "changed",
+              "subject": "1.2",
+              "before": [
+                "component:PaymentRetryWorker"
+              ],
+              "after": [
+                "component:RetryJob"
+              ]
+            }
+          ]
+        },
+        {
+          "area": "Files",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Component–File Mapping",
+          "status": "COMPARED",
+          "changes": [
+            {
+              "kind": "changed",
+              "subject": "component:PaymentRetryWorker",
+              "before": [
+                "src/payment/retry.ts"
+              ],
+              "after": []
+            },
+            {
+              "kind": "changed",
+              "subject": "component:RetryJob",
+              "before": [],
+              "after": [
+                "src/payment/retry.ts"
+              ]
+            }
+          ]
+        }
+      ],
+      "focusCount": 3,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "whitespace",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n\n## Boundary Commitments\n\n\n### This Spec Owns\nPayment recording and retry execution.\n\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n\n## File Structure Plan\n\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n\n## Components and Interfaces\n\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n\n### Payment\n\n\n#### PaymentService\n\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n\n#### PaymentRetryWorker\n\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "beforeDesign": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "external:Gateway"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved"
+      ],
+      "diff": [
+        {
+          "area": "Components",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Dependencies",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Requirements",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Requirement Mapping",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Files",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Component–File Mapping",
+          "status": "COMPARED",
+          "changes": []
+        }
+      ],
+      "focusCount": 0,
+      "aiEligible": true
+    }
+  },
+  {
+    "name": "partial-comparison",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## コンポーネント\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "beforeRequirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "beforeDesign": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n",
+    "expected": {
+      "status": "UNKNOWN",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 2,
+            "referenced": 0,
+            "mapped": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN",
+            "UNKNOWN",
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2",
+          "status": "UNKNOWN",
+          "metrics": {
+            "total": 0,
+            "mapped": 0,
+            "files": 2
+          },
+          "findingStatuses": [
+            "UNKNOWN",
+            "UNKNOWN",
+            "UNKNOWN"
+          ]
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "UNKNOWN",
+          "metrics": {
+            "components": 0,
+            "edges": 0,
+            "cycles": 0
+          },
+          "findingStatuses": [
+            "UNKNOWN"
+          ]
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "partial",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [
+        "no-components"
+      ],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|unresolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|unresolved"
+      ],
+      "diff": [
+        {
+          "area": "Components",
+          "status": "UNKNOWN",
+          "changes": []
+        },
+        {
+          "area": "Dependencies",
+          "status": "UNKNOWN",
+          "changes": []
+        },
+        {
+          "area": "Requirements",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Requirement Mapping",
+          "status": "UNKNOWN",
+          "changes": []
+        },
+        {
+          "area": "Files",
+          "status": "COMPARED",
+          "changes": []
+        },
+        {
+          "area": "Component–File Mapping",
+          "status": "UNKNOWN",
+          "changes": []
+        }
+      ],
+      "focusCount": 3,
+      "aiEligible": false
+    }
+  },
+  {
+    "name": "noncomponent-target",
+    "requirements": "# Requirements Document\n\n## Requirements\n\n### Requirement 1: Payment\n\n**Objective:** 注文の支払いを記録できる。\n\n#### Acceptance Criteria\n1. When payment succeeds, the system shall record the result.\n2. If payment fails temporarily, the system shall retry according to the retry policy.\n",
+    "design": "# Design Document\n\n## Boundary Commitments\n\n### This Spec Owns\nPayment recording and retry execution.\n\n### Out of Boundary\nOrder fulfilment and billing reconciliation.\n\n### Allowed Dependencies\nThe payment service may use the external payment gateway.\n\n### Revalidation Triggers\nPayment contract or retry policy changes.\n\n## File Structure Plan\n\n| Path | Component | Responsibility |\n|---|---|---|\n| src/payment/service.ts | PaymentService | Record payment results |\n| src/payment/retry.ts | PaymentRetryWorker | Execute retries |\n\n## Components and Interfaces\n\n| Component | Domain/Layer | Intent | Req Coverage | Key Dependencies (P0/P1) | Contracts |\n|---|---|---|---|---|---|\n| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |\n| PaymentRetryWorker | Runtime | Execute retries | 1.2 | PaymentService (P0) | Batch |\n\n### Payment\n\n#### PaymentService\n\n| Field | Detail |\n|---|---|\n| Intent | Record a payment result |\n| Requirements | 1.1 |\n\n**Dependencies**\n- Inbound: PaymentRetryWorker — retry request (P0)\n- External: Gateway — payment processing (P0)\n\n#### PaymentRetryWorker\n\n| Field | Detail |\n|---|---|\n| Intent | Execute the retry policy |\n| Requirements | 1.2 |\n\n**Dependencies**\n- Outbound: PaymentService — retry payment (P0)\n\n## System Flows\n### PayFlow\nDescription\n## Data Models\n### Payment\nDescription\n## Operational Decisions\n### RetryPolicy\nDescription\n## Requirements Traceability\n| Requirement | Flows | Data Models | Operational Decisions |\n|---|---|---|---|\n| 1.2 | PayFlow | Payment | RetryPolicy |",
+    "beforeRequirements": null,
+    "beforeDesign": null,
+    "expected": {
+      "status": "PASS",
+      "checks": [
+        {
+          "ruleId": "M1",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "referenced": 2,
+            "mapped": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2",
+          "status": "PASS",
+          "metrics": {
+            "total": 2,
+            "mapped": 2,
+            "files": 2
+          },
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M2B",
+          "status": "PASS",
+          "metrics": {},
+          "findingStatuses": []
+        },
+        {
+          "ruleId": "M3",
+          "status": "PASS",
+          "metrics": {
+            "components": 2,
+            "edges": 1,
+            "cycles": 0
+          },
+          "findingStatuses": []
+        }
+      ],
+      "analysis": {
+        "requirements": "complete",
+        "components": "complete",
+        "mappings": "complete",
+        "files": "complete",
+        "dependencies": "complete",
+        "elements": "complete",
+        "boundary": "complete"
+      },
+      "diagnostics": [],
+      "requirements": [
+        "1.1",
+        "1.2"
+      ],
+      "entities": [
+        "component:PaymentRetryWorker",
+        "component:PaymentService",
+        "dataModel:Payment",
+        "decision:RetryPolicy",
+        "external:Gateway",
+        "flow:PayFlow"
+      ],
+      "files": [
+        {
+          "path": "src/payment/retry.ts",
+          "kind": "file",
+          "change": "unspecified"
+        },
+        {
+          "path": "src/payment/service.ts",
+          "kind": "file",
+          "change": "unspecified"
+        }
+      ],
+      "relations": [
+        "dependsOn|component:PaymentRetryWorker|component:PaymentService|resolved",
+        "dependsOn|component:PaymentService|external:Gateway|resolved",
+        "implementedAt|component:PaymentRetryWorker|src/payment/retry.ts|resolved",
+        "implementedAt|component:PaymentService|src/payment/service.ts|resolved",
+        "realizedBy|1.1|component:PaymentService|resolved",
+        "realizedBy|1.2|component:PaymentRetryWorker|resolved",
+        "realizedBy|1.2|dataModel:Payment|resolved",
+        "realizedBy|1.2|decision:RetryPolicy|resolved",
+        "realizedBy|1.2|flow:PayFlow|resolved"
+      ],
+      "diff": [],
+      "focusCount": 0,
+      "aiEligible": true
+    }
+  }
+]

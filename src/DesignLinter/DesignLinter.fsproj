@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>design-linter</AssemblyName>
+    <RuntimeIdentifiers>osx-arm64;linux-arm64</RuntimeIdentifiers>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Domain.fs" />
+    <Compile Include="Markdown.fs" />
+    <Compile Include="Parser.fs" />
+    <Compile Include="Rules.fs" />
+    <Compile Include="SemanticDiff.fs" />
+    <Compile Include="Report.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="1.4.0" />
+    <PackageReference Include="FSharp.SystemTextJson" Version="1.4.36" />
+  </ItemGroup>
+</Project>

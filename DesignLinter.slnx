@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/DesignLinter/DesignLinter.fsproj" />
+  <Project Path="tests/DesignLinter.Tests/DesignLinter.Tests.fsproj" />
+</Solution>
