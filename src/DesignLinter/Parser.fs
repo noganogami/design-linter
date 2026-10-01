@@ -43,11 +43,22 @@ module Parser =
         let addEntity kind name at layer = b.AddEntity(kind, name, at, layer)
         let references value at =
             [ for token in names value do
-                if not (matches @"^\d+\.\d+$" token) then
-                    b.Diagnose("mappings", "ambiguous-requirement-reference", $"Expected canonical N.M requirement ID, found: {token}", [at])
-                else
-                    b.IR <- { b.IR with requirementReferences = b.IR.requirementReferences @ [{ id = token; evidence = [at] }] }
-                    yield token ]
+                let range = rx @"^([1-9][0-9]*)\.([1-9][0-9]*)\s*[-–]\s*([1-9][0-9]*)\.([1-9][0-9]*)$" token
+                let ids =
+                    if matches @"^[1-9][0-9]*\.[1-9][0-9]*$" token then [token]
+                    elif range.Success then
+                        match Int32.TryParse(group 2 range), Int32.TryParse(group 4 range) with
+                        | (true, first), (true, last) when group 1 range = group 3 range && first <= last && int64 last - int64 first < 1000L ->
+                            [ for n in first .. last -> $"{group 1 range}.{n}" ]
+                        | _ ->
+                            b.Diagnose("mappings", "unsupported-requirement-range", $"Range must ascend within one parent and contain at most 1000 IDs: {token}", [at])
+                            []
+                    else
+                        b.Diagnose("mappings", "ambiguous-requirement-reference", $"Expected canonical N.M ID or N.M–N.K range, found: {token}", [at])
+                        []
+                for id in ids do
+                    b.IR <- { b.IR with requirementReferences = b.IR.requirementReferences @ [{ id = id; evidence = [at] }] }
+                    yield id ] |> List.distinct
         let mapping ids target at =
             for id in ids do b.AddRelation { kind = "realizedBy"; from = id; ``to`` = target; resolution = "unresolved"; evidence = [at] }
         let declarations = Dictionary<string, ResizeArray<string list * Evidence>>()
@@ -61,6 +72,21 @@ module Parser =
         let details = ResizeArray<Section * string>()
         let summaries, detailIds = HashSet<string>(), HashSet<string>()
         let containers = find "Components and Interfaces" @ find "Components & Interfaces"
+        // Read explicit names first so heading normalization is independent of section order.
+        let summaryRow (cells: Map<string,string>) =
+            cells.ContainsKey "component" && not (cells.ContainsKey "direction" || cells.ContainsKey "type")
+        let summaryNames =
+            containers |> List.collect (fun c -> c :: sections c)
+            |> List.collect (fun s -> s.nodes |> Seq.filter (fun n -> n.kind = "table") |> Seq.collect rows |> Seq.toList)
+            |> List.choose (fun (cells, _) -> if summaryRow cells then Some (cell "component" cells) else None)
+            |> Set.ofList
+        let componentName title =
+            if summaryNames.Contains title then title
+            else
+                // Only a concrete path annotation and an exact summary name establish an alias.
+                let m = rx @"^(.+?)\s*(?:\(([A-Za-z0-9_./@-]+\.[A-Za-z0-9_-]+)\)|（([A-Za-z0-9_./@-]+\.[A-Za-z0-9_-]+)）)$" title
+                let name = (group 1 m).Trim()
+                if m.Success && summaryNames.Contains name then name else title
         for container in containers do
             for section in container :: sections container do
                 let fields = section.nodes |> Seq.filter (fun n -> n.kind = "table") |> Seq.collect rows |> Seq.toList
@@ -70,13 +96,13 @@ module Parser =
                 if placeholderName then b.Diagnose("components", "placeholder-component", "Component name is a placeholder.", [section.evidence])
                 else
                     if isDetail then
-                        let id = addEntity "component" section.title section.evidence None
+                        let id = addEntity "component" (componentName section.title) section.evidence None
                         if not (detailIds.Add id) then b.Diagnose("components", "duplicate-component", $"Duplicate detailed definition: {section.title}", [section.evidence])
                         details.Add(section, id)
                         for cells, node in fieldRows do
                             if matchesI "^requirements$" (cell "field" cells) then recordCoverage id (cell "detail" cells) (evidence file section.title node)
                     // Dependency tables are references, not component definitions.
-                    for cells, node in fields |> List.filter (fun (c, _) -> c.ContainsKey "component" && not (c.ContainsKey "direction" || c.ContainsKey "type")) do
+                    for cells, node in fields |> List.filter (fun (c, _) -> summaryRow c) do
                         let name, at = cell "component" cells, evidence file section.title node
                         if onlyPlaceholder name then b.Diagnose("components", "empty-component", "Empty or placeholder component name.", [at])
                         else
@@ -140,7 +166,7 @@ module Parser =
             for child in sections section do
                 if matches "Contract|Interface" child.title then
                     let kind = if child.title.Contains "Interface" then "interface" else "contract"
-                    let contractId = addEntity kind $"{section.title} {child.title}" child.evidence None
+                    let contractId = addEntity kind $"{componentName section.title} {child.title}" child.evidence None
                     b.AddRelation { kind = "providedBy"; from = contractId; ``to`` = id; resolution = "resolved"; evidence = [child.evidence] }
                     for node in child.nodes |> Seq.filter (fun n -> n.kind = "code") do
                         for m in Regex.Matches(node.value, @"\binterface\s+([A-Za-z_$][\w$]*)") do
@@ -169,10 +195,14 @@ module Parser =
                         else
                             let ids = references (cell "requirement" cells) at
                             for column, kind in ["components", "component"; "interfaces", "interface"; "flows", "flow"; "contracts", "contract"; "data models", "dataModel"; "operational decisions", "decision"] do
-                                for name in names (cell column cells) do mapping ids (Domain.entityId kind name) at
+                                for name in names (cell column cells) do
+                                    let target = Domain.entityId kind name
+                                    mapping ids target at
+                                    if kind <> "component" && not (b.IR.entities |> List.exists (fun e -> e.id = target)) then
+                                        b.Diagnose("mappings", "ambiguous-traceability-target", $"Unresolved {column} cell may be a reference or description: {name}", [at])
                 if node.kind = "list" then
                     for item in items node do
-                        let m = rx @"^(\d+(?:\.\d+)?)\s*(?:->|→|:)\s*(.+)$" (text item)
+                        let m = rx @"^([0-9]+(?:\.[0-9]+)?(?:\s*[-–]\s*[0-9]+\.[0-9]+)?)\s*(?:->|→|:)\s*(.+)$" (text item)
                         let at = evidence file section.title item
                         if not m.Success then b.Diagnose("mappings", "unsupported-traceability-bullet", "Unrecognized traceability bullet.", [at])
                         else

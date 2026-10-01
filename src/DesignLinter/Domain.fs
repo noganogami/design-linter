@@ -33,7 +33,7 @@ type Finding = { ruleId: string; status: Status; message: string; evidence: Evid
 type Check = { ruleId: string; title: string; status: Status; findings: Finding list; metrics: Map<string, int> option; source: string }
 
 module Domain =
-    let profile = { id = "cc-sdd-english-v1"; parserVersion = "0.2.0"; sourceRevision = "e2a0c671aef37a482404905b409ab5c27092b25b" }
+    let profile = { id = "cc-sdd-english-v1"; parserVersion = "0.3.0"; sourceRevision = "e2a0c671aef37a482404905b409ab5c27092b25b" }
     let areas = [ "requirements"; "components"; "mappings"; "files"; "dependencies"; "elements"; "boundary" ]
     let empty documents = {
         profile = profile; documents = documents; requirements = []; entities = []; files = []; relations = []

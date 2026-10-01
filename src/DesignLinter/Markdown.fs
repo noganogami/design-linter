@@ -77,7 +77,7 @@ module internal Md =
                 cells, row)
         | [] -> []
     let names (value: string) =
-        Regex.Split(value, "[,;\n]") |> Array.map (fun s -> Regex.Replace(s, @"\s*\(P[012]\)\s*$", "", RegexOptions.IgnoreCase).Trim())
+        Regex.Split(value, "[,;、\n]") |> Array.map (fun s -> Regex.Replace(s, @"\s*\(P[012]\)\s*$", "", RegexOptions.IgnoreCase).Trim())
         |> Array.filter (fun s -> s <> "" && not (matchesI @"^(?:none|n/a|—|-|なし)$" s)) |> Array.toList
     let isNone (value: string) = matchesI @"^(?:none|n/a|—|-|なし)\.?$" (value.Trim())
     let placeholder value = matchesI @"\b(?:TBD|TODO)\b|\{\{[^}]+\}\}|\[(?:Component Name|ComponentName|specific value|name and brief rationale)\]" value

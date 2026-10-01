@@ -166,6 +166,64 @@ let main _ =
         assertTrue (ir.relations |> List.exists (fun r -> r.kind = "providedBy" && r.from = "interface:RetryContract" && r.``to`` = "component:PaymentRetryWorker")) "owner missing"
         assertEqual PASS (Rules.requirementCoverage ir).status)
 
+    test "Japanese separators preserve traceability and file owners" (fun () ->
+        let trace = "\n## Requirements Traceability\n| Requirement | Components |\n|---|---|\n| 1.1、1.2 | PaymentService、PaymentRetryWorker |\n"
+        let input = design.Replace("| src/payment/service.ts | PaymentService |", "| src/payment/service.ts | PaymentService、PaymentRetryWorker |") + trace
+        let ir = Parser.parse requirements input
+        assertEqual PASS (Report.build ir None).status
+        for req in ["1.1"; "1.2"] do
+            for name in ["PaymentService"; "PaymentRetryWorker"] do
+                assertTrue (ir.relations |> List.exists (fun r -> r.kind = "realizedBy" && r.from = req && r.``to`` = "component:" + name && r.resolution = "resolved")) "missing Japanese-separated mapping"
+        assertTrue (ir.relations |> List.exists (fun r -> r.kind = "implementedAt" && r.from = "component:PaymentRetryWorker" && r.``to`` = "src/payment/service.ts")) "missing second file owner")
+    test "Japanese separators preserve dependency declarations and priorities" (fun () ->
+        let input = design.Replace("Gateway (P0) | API", "Gateway (P0)、Backup (P1) | API").Replace("External: Gateway —", "External: Gateway (P0)、Backup (P1) —")
+        let ir = Parser.parse requirements input
+        assertEqual PASS (Report.build ir None).status
+        assertTrue (ir.relations |> List.exists (fun r -> r.kind = "dependsOn" && r.``to`` = "external:Backup" && r.resolution = "resolved")) "missing external dependency")
+    test "path-annotated component heading merges with exact summary and retains evidence" (fun () ->
+        for suffix in ["（perf_runner/plan_resolver.py）"; " (src/payment/service.ts)"; " (`service.fs`)"] do
+            let heading = "#### PaymentService" + suffix
+            let ir = Parser.parse requirements (design.Replace("#### PaymentService", heading))
+            assertEqual PASS (Report.build ir None).status
+            assertEqual 2 (Domain.components ir).Length
+            let comp = ir.entities |> List.find (fun c -> c.name = "PaymentService")
+            assertEqual 2 comp.evidence.Length
+            assertTrue (comp.evidence |> List.exists (fun e -> e.section.StartsWith("PaymentService") && e.section.Contains("."))) "original heading evidence lost"
+            assertEqual (parsed()).files ir.files)
+    test "heading aliases do not depend on summary order" (fun () ->
+        let input = design.Replace("#### PaymentService", "#### PaymentService（service.py）")
+        let start, finish = input.IndexOf("| Component | Domain/Layer |"), input.IndexOf("### Payment")
+        let table = input[start..finish-1]
+        let reordered = input[..start-1] + input[finish..] + "\n### Summary\n" + table
+        let ir = Parser.parse requirements reordered
+        assertEqual PASS (Report.build ir None).status
+        assertEqual 2 (Domain.components ir).Length)
+    test "path-annotated component keeps canonical contract owner and identity" (fun () ->
+        let contract = "\n##### Service Interface\nContract description\n"
+        let before = Parser.parse requirements (design + contract)
+        let after = Parser.parse requirements (design.Replace("#### PaymentRetryWorker", "#### PaymentRetryWorker（worker.fs）") + contract)
+        assertTrue (after.relations |> List.exists (fun r -> r.kind = "providedBy" && r.from = "interface:PaymentRetryWorker Service Interface" && r.``to`` = "component:PaymentRetryWorker")) "contract identity changed"
+        let diff = SemanticDiff.compare (Some before) after
+        assertTrue (diff.groups |> List.forall (fun g -> g.changes.IsEmpty)) "annotation generated structural changes")
+    test "parentheses do not silently merge unrelated components" (fun () ->
+        for suffix in [" (Legacy)"; "（worker/）"; " (src/*.py)"; " (service.py）"; " (service.py, worker.py)"] do
+            let ir = Parser.parse requirements (design.Replace("#### PaymentService", "#### PaymentService" + suffix))
+            assertEqual 3 (Domain.components ir).Length
+        let exact = design.Replace("PaymentService", "PaymentService (service.py)")
+        let ir = Parser.parse requirements exact
+        assertEqual 2 (Domain.components ir).Length
+        assertTrue (ir.entities |> List.exists (fun c -> c.name = "PaymentService (service.py)")) "exact summary name was stripped"
+        let noSummary = design.Replace("| PaymentService | Service | Record payments | 1.1 | Gateway (P0) | API |", "").Replace("#### PaymentService", "#### PaymentService（service.py）")
+        let ir = Parser.parse requirements noSummary
+        assertTrue (ir.entities |> List.exists (fun c -> c.name = "PaymentService（service.py）")) "alias inferred without summary")
+    test "heading normalization retains conflicting definitions and missing file mappings" (fun () ->
+        let conflict = design + "\n#### PaymentService（other.py）\n| Field | Detail |\n|---|---|\n| Requirements | 1.2 |\n"
+        let ir = Parser.parse requirements conflict
+        for code in ["duplicate-component"; "conflicting-coverage"] do
+            assertTrue (ir.diagnostics |> List.exists (fun d -> d.code = code)) ("lost diagnostic: " + code)
+        let unmapped = design.Replace("#### PaymentService", "#### PaymentService（src/payment/service.ts）").Replace("| src/payment/service.ts | PaymentService |", "| src/payment/service.ts | |")
+        assertEqual FAIL (Parser.parse requirements unmapped |> Rules.filePlanConsistency).status)
+
     let dir = Path.Combine(Path.GetTempPath(), "design-linter-fsharp-tests-" + Guid.NewGuid().ToString("N"))
     Directory.CreateDirectory dir |> ignore
     try
@@ -206,5 +264,6 @@ let main _ =
             let code, output, error = run [|"--help"|]
             assertEqual 0 code; assertTrue (output.Contains "Usage:") "missing usage"; assertEqual "" error)
     finally Directory.Delete(dir,true)
+    ResolutionTests.run test requirements design
     printfn "%d passed; %d failed" passed failed
     if failed = 0 then 0 else 1

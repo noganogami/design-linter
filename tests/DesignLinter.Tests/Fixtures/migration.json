@@ -2363,6 +2363,7 @@
           },
           "findingStatuses": [
             "UNKNOWN",
+            "UNKNOWN",
             "UNKNOWN"
           ]
         },
@@ -2396,13 +2397,14 @@
       "analysis": {
         "requirements": "complete",
         "components": "complete",
-        "mappings": "complete",
+        "mappings": "partial",
         "files": "complete",
         "dependencies": "complete",
         "elements": "partial",
         "boundary": "complete"
       },
       "diagnostics": [
+        "ambiguous-traceability-target",
         "unnamed-design-elements"
       ],
       "requirements": [
