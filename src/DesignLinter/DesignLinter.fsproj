@@ -11,6 +11,8 @@
     <Compile Include="Parser.fs" />
     <Compile Include="Rules.fs" />
     <Compile Include="SemanticDiff.fs" />
+    <Compile Include="ReviewIssues.fs" />
+    <Compile Include="Bindings.fs" />
     <Compile Include="Report.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

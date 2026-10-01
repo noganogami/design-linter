@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "inputs": {
+    "requirements": "c82b5223a682b79f9a5c8e47c8798091db13cbe28785021e89b70d79f9cff9b7",
+    "design": "981d9884b13af6f35ed9aa6b319baa7676ac75aa076e4254c47ccccde8a2f518",
+    "parserVersion": "0.3.0",
+    "profile": "cc-sdd-english-v1",
+    "sourceRevision": "e2a0c671aef37a482404905b409ab5c27092b25b"
+  },
+  "entries": [
+    {
+      "id": "retry-api",
+      "kind": "referenceAlias",
+      "from": "interface:Retry API",
+      "to": "interface:PaymentRetryWorker Service Interface",
+      "state": "proposed",
+      "author": "example",
+      "rationale": "The Service Interface description calls the retry operations Retry API. This proposed alias links the traceability cell to that existing definition.",
+      "evidence": [
+        {
+          "document": "design",
+          "quote": "| 1.2 | Retry API |"
+        },
+        {
+          "document": "design",
+          "quote": "##### Service Interface\nRetry API exposes PaymentRetryWorker retry operations."
+        }
+      ]
+    }
+  ]
+}

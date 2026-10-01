@@ -16,6 +16,7 @@ type ReviewReport = {
     schemaVersion: int; profile: Profile; inputs: InputDocuments; status: Status; counts: Counts
     checks: Check list; analysis: Map<string,string>; diagnostics: Diagnostic list; designIR: DesignIR
     semanticDiff: SemanticDiff; humanReviewFocus: FocusResult; aiReview: AiReview; limitations: string list
+    reviewIssues: ReviewIssue list; inputFingerprint: InputFingerprint option; supplementalReview: SupplementalReview option
 }
 
 module Report =
@@ -68,7 +69,25 @@ module Report =
           status = status
           counts = { fail = findings |> List.filter (fun f -> f.status = FAIL) |> List.length; unknown = findings |> List.filter (fun f -> f.status = UNKNOWN) |> List.length; reviewRequired = findings |> List.filter (fun f -> f.status = REVIEW_REQUIRED) |> List.length }
           checks = checks; analysis = ir.completeness; diagnostics = ir.diagnostics; designIR = ir; semanticDiff = diff
-          humanReviewFocus = focus checks diff; aiReview = { status = "NOT_RUN"; eligible = status = PASS }; limitations = limitations }
+          humanReviewFocus = focus checks diff; aiReview = { status = "NOT_RUN"; eligible = status = PASS }; limitations = limitations
+          reviewIssues = ReviewIssues.build ir checks; inputFingerprint = None; supplementalReview = None }
+
+    let withInputs requirements design bindings (report: ReviewReport) =
+        let ir = report.designIR
+        let issues = ReviewIssues.withSources (Map.ofList [ir.documents.requirements, requirements; ir.documents.design, design]) report.reviewIssues
+        let supplemental = bindings |> Option.map (Bindings.evaluate requirements design ir)
+        let issueFocus = issues |> List.map (fun i ->
+            { question = i.question; reason = String.concat " " i.messages; evidence = i.evidence; detailRefs = [i.id] })
+        let bindingFocus = supplemental |> Option.map (fun s ->
+            { question = "補完定義の解釈・根拠・確認状態は妥当ですか？"
+              reason = if s.status = "CONDITIONAL" then "補完後の検査は保存された解釈を仮定した結果です。原文の検査結果は変更していません。" else String.concat " " s.errors
+              evidence = []; detailRefs = ["supplementalReview"] }) |> Option.toList
+        let isFailure (f: Focus) = f.detailRefs |> List.exists (fun r -> report.checks |> List.exists (fun c -> c.ruleId = r && c.status = FAIL))
+        let failures, other = report.humanReviewFocus.items |> List.partition isFailure
+        let original = other |> List.filter (fun f -> not (f.detailRefs |> List.exists (fun r -> issues |> List.exists (fun i -> List.contains r i.ruleIds))))
+        let focus = failures @ bindingFocus @ issueFocus @ original
+        { report with reviewIssues = issues; inputFingerprint = Some (Bindings.fingerprint requirements design ir.profile); supplementalReview = supplemental
+                      humanReviewFocus = { items = focus |> List.truncate 3 |> List.map (fun f -> { f with reason = if f.reason.Length > 300 then f.reason[..296] + "…" else f.reason }); omitted = max 0 (focus.Length - 3) + report.humanReviewFocus.omitted } }
 
     let private escape (value: string) = Regex.Replace(value, @"[\\`*_\[\]<>|]", "\\$0").Replace("\r\n", " ").Replace("\n", " ")
     let evidenceLinks (evidence: Evidence list) =
@@ -85,6 +104,24 @@ module Report =
             add [$"{i + 1}. {escape f.question}"; "   - " + escape f.reason; "   - Evidence: " + links; "   - Details: " + (f.detailRefs |> List.map escape |> String.concat ", "); ""]
         if report.humanReviewFocus.items.IsEmpty then add ["構造上の根拠から追加の確認項目は生成されませんでした。意味的レビューは未実施です。"; ""]
         if report.humanReviewFocus.omitted > 0 then add [$"Additional focus groups: {report.humanReviewFocus.omitted}. All findings and changes remain below."; ""]
+        match report.supplementalReview with
+        | Some s ->
+            add ["## Supplemental Review"; ""; "Status: " + s.status; ""; "原文の判定は不変です。補完後の判定は保存した解釈を仮定した結果であり、解釈の正しさの証明ではありません。"; ""]
+            for error in s.errors do add ["- " + escape error]
+            for entry in s.entries do add [$"- {escape entry.id} ({escape entry.state}, {escape entry.author}): {escape entry.from} → {escape entry.``to``}"; "  - " + escape entry.rationale]
+            for check in s.checks do
+                add [$"- **{check.status} {escape check.title}**"]
+                for finding in check.findings do add ["  - " + escape finding.message; "    - " + evidenceLinks finding.evidence]
+            add [""]
+        | None -> ()
+        if not report.reviewIssues.IsEmpty then
+            add ["## Resolution Requests"; ""; $"{report.reviewIssues.Length} source-level groups. Full findings remain below."; ""]
+            for issue in report.reviewIssues do
+                add [$"- {issue.id} / {issue.category}: {escape issue.question}"; "  - " + (issue.messages |> List.map escape |> String.concat " ")
+                     "  - Checks: " + String.concat ", " issue.ruleIds; "  - Requirements: " + String.concat ", " issue.affectedRequirements
+                     "  - Targets: " + (issue.targets |> List.map escape |> String.concat ", "); "  - " + evidenceLinks issue.evidence]
+                for excerpt in issue.excerpts do add ["  - Source: " + escape excerpt.text]
+            add [""]
         add ["## Mechanical Checks"; ""]
         for check in report.checks do
             add [$"- **{check.status} {escape check.title}** ({check.ruleId})"]
