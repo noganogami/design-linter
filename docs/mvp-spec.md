@@ -195,3 +195,7 @@ src/DesignLinter/
 ```
 
 validator は Markdown に依存しない。IR は rule に依存しない。Focus は IR・finding・diff を入力にし、parser の内部実装に依存しない。
+
+## 0.3.0 の追加機能
+
+`reviewIssues` と `inputFingerprint` を JSON に追加し、`--bindings` 指定時は `supplementalReview` を付加する。原文の `status` / `checks` / `designIR` / `semanticDiff` は保持する。補完結果は条件付きであり、意味解釈の確認状態と機械検査を分離する。詳細は [補完定義の契約](../skills/design-linter-review/references/bindings.md)。実装は `ReviewIssues.fs`（原因集約）と `Bindings.fs`（補完の入力検査・候補 IR）に分離している。

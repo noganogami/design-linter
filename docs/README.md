@@ -2,7 +2,7 @@
 
 更新日: 2026-10-01
 
-状態: PoC の F# 移行と ARM64 向け self-contained publish を完了。59テスト通過。EARS モデル生成・検証器・skill は未実装。詳細は [移行記録](fsharp-migration.md) を参照。
+状態: PoC の F# 移行と ARM64 向け self-contained publish を完了。parser 0.3.0 では要件範囲・原因集約・保存済み補完定義の条件付き検査・optional skill を追加。EARS モデル生成と要件充足検証器は未実装。詳細は [移行記録](fsharp-migration.md) を参照。
 
 今回の仕様は `docs/` で管理します。cc-sdd のインストールや spec approval metadata の生成は行っていません。
 
@@ -18,6 +18,7 @@
 2. [MVP 仕様](mvp-spec.md): 入出力、IR、判定、semantic diff、Human Review Focus。
 3. [実装計画](implementation-plan.md): 小さな increment と各検査の受入テスト。
 4. [Parser profile](parser-profile.md): 実装で扱える記述形式と保守的な制限。
+5. [実文書の UNKNOWN 対応](real-document-compatibility.md): 表記揺れ・範囲指定・原因集約・補完検証と残課題。
 
 ## 仕様の位置付け
 
@@ -36,3 +37,7 @@
 ## 範囲
 
 現行 PoC は parser、Requirement coverage、Component / File Structure Plan consistency、Dependency graph 抽出、循環検出、semantic diff、Human Review Focus に限定します。拡張では検証を CLI に置き、skill なしでも人間の補完によって完結できる workflow にします。Code Graph と高度な形式手法は引き続き後続です。
+
+## 補完 workflow
+
+[利用 skill](../skills/design-linter-review/SKILL.md) と [補完定義の契約](../skills/design-linter-review/references/bindings.md)。CLI は非対話で、原文の判定と保存した解釈に基づく判定を分離します。

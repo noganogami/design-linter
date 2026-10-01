@@ -4,7 +4,7 @@ cc-sdd の `design.md` に対して機械的な整合性検査と構造の seman
 
 構造検査・semantic diff・Human Review Focus を生成する CLI を実装しています。AI Review は実行しません。
 
-本体は **F# / .NET 10** です。self-contained の単一ファイルを生成でき、配布物の利用に .NET・Node・proto は不要です。EARS からの再現可能なモデル生成と要件充足の検証は今後追加します。skill は optional とする方針です。[次の実装計画](docs/roadmap.md) を参照してください。
+本体は **F# / .NET 10** です。self-contained の単一ファイルを生成でき、配布物の利用に .NET・Node・proto は不要です。EARS からの再現可能なモデル生成と要件充足の検証は今後追加します。検査・補完を支援する [optional skill](skills/design-linter-review/SKILL.md) も同梱しています。[次の実装計画](docs/roadmap.md) を参照してください。
 
 ## 実行
 
@@ -39,10 +39,27 @@ proto run dotnet -- run --project src/DesignLinter -- \
 |---|---|
 | 0 | Mechanical PASS |
 | 1 | Mechanical FAIL |
-| 2 | 引数・入力読み取りエラー |
-| 3 | Mechanical UNKNOWN または REVIEW_REQUIRED |
+| 2 | 引数・入力読み取りエラー、INVALID な補完定義 |
+| 3 | Mechanical UNKNOWN / REVIEW_REQUIRED、STALE または条件付きの補完レビュー |
 
-終了コードは現在の文書の mechanical checks に対応します。baseline の比較可否は JSON の `semanticDiff.status` と各 group に別途表示します。
+補完定義を使わない場合、終了コードは現在の文書の mechanical checks に対応します。baseline の比較可否は JSON の `semanticDiff.status` と各 group に別途表示します。
+
+## 曖昧な記述と補完定義
+
+JSON の `reviewIssues` は原文箇所ごとに原因・影響する要件・対象・確認する問いをまとめ、`excerpts` に原文を残します。全 finding は従来どおり `checks` に保持します。
+
+```sh
+proto run dotnet -- run --project src/DesignLinter -- \
+  --requirements examples/bindings/requirements.md \
+  --design examples/bindings/design.md \
+  --bindings examples/bindings/bindings.json --format json
+```
+
+この例は原文の UNKNOWN と、補完後の CONDITIONAL / mechanical PASS を別々に出力し、終了コードは3です。補完定義の候補を適用しただけでは通常の PASS にしません。CLI は入力待ちせず、文書・定義を変更しません。
+
+現在の `--bindings` は、既存 entity への参照名の対応と、既存 Component–ファイルの対応を扱います。根拠引用・参照・競合・入力ハッシュを検査し、文書が変われば STALE にします。全体ハッシュによるため、無関係な編集でも再確認が必要です。依存方向・path-base・説明としての無視はまだ補完できません。
+
+[補完定義の仕様](skills/design-linter-review/references/bindings.md) と [skill](skills/design-linter-review/SKILL.md) を参照してください。skill は配布用のファイルとして同梱し、利用先の agent の skill ディレクトリへ `skills/design-linter-review/` を配置して使用します。この作業ではグローバル環境へインストールしていません。
 
 ## 配布物の作成
 

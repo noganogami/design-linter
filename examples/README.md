@@ -28,3 +28,18 @@ proto run dotnet -- run --project src/DesignLinter -- --requirements examples/pa
 - AI Review は NOT_RUN。
 
 `--format json` を付けると、`designIR` から dependency graph と evidence も確認できます。
+
+## 保存済み補完定義の例
+
+`bindings/` は、Traceability の `Retry API` と詳細見出し `PaymentRetryWorker Service Interface` の対応を補完する例です。根拠となる説明は design.md に記載しています。
+
+```sh
+proto run dotnet -- run --project src/DesignLinter -- \
+  --requirements examples/bindings/requirements.md \
+  --design examples/bindings/design.md \
+  --bindings examples/bindings/bindings.json --format json
+```
+
+期待値: 原文 `status: UNKNOWN`、`supplementalReview.status: CONDITIONAL`、`mechanicalStatus: PASS`、終了コード3。bindings を外すと原文の UNKNOWN が残ります。提案の `state` は `proposed` のままで、人の解釈確認を済ませた例ではありません。
+
+ファイルを変更すると fingerprint が変わります。結果を通すためだけに fingerprint を更新せず、現在の文書と解釈を確認してください。

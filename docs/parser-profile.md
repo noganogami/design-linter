@@ -12,7 +12,7 @@
 
 `### Requirement 1: Title` と直下の `#### Acceptance Criteria` の番号付きリストを読みます。数字から始まる `1. Title` などの要件見出しも扱います。受入条件のリスト番号は Markdown の表示番号として扱います。
 
-ID は文字列 `1.1`。design の参照欄ではカンマ・セミコロン・改行で区切った canonical ID を扱います。範囲指定、親 ID、自由文の参照は暗黙展開しません。コード内の数字や本文のバージョンは参照率に含めません。
+ID は文字列 `1.1`。design の参照欄ではカンマ・読点 `、`・セミコロン・改行で区切った canonical ID を扱います。`0.3.0` から `2.1–2.9` / `2.1-2.9` のような範囲を展開します。同一親・昇順・両端明記、最大1000件に限定し、ゼロ・先頭ゼロを許容しない ASCII の正整数を使います。列挙した全 ID を存在照合し、欠番を黙って除きません。親 ID、異なる親をまたぐ範囲、自由文の参照は暗黙展開しません。コード内の数字や本文のバージョンは参照率に含めません。
 
 ## Component と traceability
 
@@ -24,7 +24,11 @@ ID は文字列 `1.1`。design の参照欄ではカンマ・セミコロン・�
 
 同名 Component の summary と詳細を統合しますが、要件対応や layer の矛盾は UNKNOWN にします。
 
-`Requirements Traceability` の `Requirement` と `Components / Interfaces / Flows / Contracts / Data Models / Operational Decisions` 列を解析します。Component への単純な bullet mapping `1.1 → Worker` も対応します。
+parserVersion `0.2.1` から、詳細見出し `#### Worker（src/worker.py）` / `#### Worker (src/worker.py)` は、`Worker` が summary の Component 名に完全一致する場合に統合します。末尾の括弧は対になり、中身が対応文字種の具体的な拡張子付きパスである必要があります。見出し全体が summary の名前と一致する場合はそちらを優先し、`Worker (Legacy)` のような修飾や summary にない名前は変更しません。元の見出しと行位置は evidence に残します。見出しのパスから File Plan の mapping を生成したり、パス接頭辞を補ったりはしません。
+
+`Requirements Traceability` の `Requirement` と `Components / Interfaces / Flows / Contracts / Data Models / Operational Decisions` 列を解析します。Component への単純な bullet mapping `1.1 → Worker` と限定範囲 `1.1–1.3 → Worker` も対応します。未解決の非 Component 列は、参照か説明かを確定できないため `ambiguous-traceability-target` として UNKNOWN にします。明示された Component 名の未定義参照は従来どおり検査します。
+
+名前リスト（traceability、依存、ファイル所有 Component）もカンマ・読点 `、`・セミコロン・改行で区切ります。これらの欄では区切り文字を名前の一部として扱いません。
 
 Flow、Data Model、運用決定は、それぞれ `System Flows`、`Data Models`、`Operational Decisions` の名前付き小見出しで識別します。これらの追加列や見出しは parser の対応形式であり、cc-sdd の必須形式ではありません。
 
@@ -61,4 +65,8 @@ Mermaid は静的依存の入力にしません。外部サービスへの edge 
 
 ## F# 移行
 
-parserVersion は `0.2.0`。旧実装との30ケースの構造比較と、行位置・code block・表・CLI の個別テストを実施しています。依存表の `Component` 列を Component 定義と誤認しない修正を追加しました。詳細は [移行記録](fsharp-migration.md) を参照してください。
+F# 移行時の parserVersion は `0.2.0`。旧実装との30ケースの構造比較と、行位置・code block・表・CLI の個別テストを実施しました。依存表の `Component` 列を Component 定義と誤認しない修正を追加しました。詳細は [移行記録](fsharp-migration.md) を参照してください。`0.2.1` の変更と残課題は [実文書の UNKNOWN 対応](real-document-compatibility.md) に記録しています。
+
+## 0.3.0 の補完と原因集約
+
+CLI は `reviewIssues` に解析診断と未解決参照を原文箇所・原因ごとにまとめます。`--bindings` で保存済みの解釈を読み、別の候補 IR を検査できます。原文 IR・通常の判定・semantic diff は変えません。[補完定義の仕様](../skills/design-linter-review/references/bindings.md) を参照。
